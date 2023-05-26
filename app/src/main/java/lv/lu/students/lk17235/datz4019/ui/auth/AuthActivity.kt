@@ -44,7 +44,7 @@ class AuthActivity : AppCompatActivity() {
                 showLoginFailed(exception)
             }
             it.success?.let { authResult ->
-                showLoginSuccess(authResult.user?.displayName!!)
+                showLoginSuccess(authResult.user?.displayName ?: authResult.user?.email!!)
             }
         }
     }
@@ -53,7 +53,7 @@ class AuthActivity : AppCompatActivity() {
         super.onStart()
 
         viewModel.currentUser?.let { user ->
-            showLoginSuccess(user.displayName!!)
+            showLoginSuccess(user.displayName ?: user.email!!)
         }
     }
 
