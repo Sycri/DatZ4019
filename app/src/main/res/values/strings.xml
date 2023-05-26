@@ -3,4 +3,27 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_login">Login</string>
+    <string name="title_signup">Sign Up</string>
+
+    <string name="prompt_username">Username</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
+
+    <string name="invalid_username">At least 4 characters</string>
+    <string name="invalid_email">Invalid e-mail</string>
+    <string name="invalid_email_used">Already in use</string>
+    <string name="invalid_password">At least 6 characters</string>
+    <string name="invalid_confirm_password">Must match prior entry</string>
+
+    <string name="no_account">Don\'t have an account?</string>
+
+    <string name="action_register">Create an account</string>
+    <string name="action_signup">Create account</string>
+    <string name="action_login">Login</string>
+
+    <string name="welcome">"Welcome %1$s!"</string>
+    <string name="invalid_account">Invalid e-mail/password</string>
+    <string name="auth_failed">Login/Registration failed</string>
 </resources>

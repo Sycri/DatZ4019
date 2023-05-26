@@ -2,24 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/navigation_main"
     app:startDestination="@+id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="lv.lu.students.lk17235.datz4019.ui.home.HomeFragment"
+        android:name="lv.lu.students.lk17235.datz4019.ui.main.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="lv.lu.students.lk17235.datz4019.ui.dashboard.DashboardFragment"
+        android:name="lv.lu.students.lk17235.datz4019.ui.main.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="lv.lu.students.lk17235.datz4019.ui.notifications.NotificationsFragment"
+        android:name="lv.lu.students.lk17235.datz4019.ui.main.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

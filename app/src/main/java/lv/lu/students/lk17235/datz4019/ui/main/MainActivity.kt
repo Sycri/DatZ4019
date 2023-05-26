@@ -1,4 +1,4 @@
-package lv.lu.students.lk17235.datz4019
+package lv.lu.students.lk17235.datz4019.ui.main
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import lv.lu.students.lk17235.datz4019.R
 import lv.lu.students.lk17235.datz4019.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
