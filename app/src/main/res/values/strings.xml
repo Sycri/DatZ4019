@@ -2,7 +2,7 @@
     <string name="app_name">DatZ4019</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_orders">Orders</string>
     <string name="title_login">Login</string>
     <string name="title_signup">Sign Up</string>
 
@@ -26,4 +26,7 @@
     <string name="welcome">"Welcome %1$s!"</string>
     <string name="invalid_account">Invalid e-mail/password</string>
     <string name="auth_failed">Login/Registration failed</string>
+
+    <string name="prompt_logo">Logo</string>
+    <string name="prompt_title">Title</string>
 </resources>
