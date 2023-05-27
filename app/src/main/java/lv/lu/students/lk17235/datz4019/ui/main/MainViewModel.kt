@@ -3,6 +3,8 @@ package lv.lu.students.lk17235.datz4019.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import lv.lu.students.lk17235.datz4019.data.AuthRepository
 
@@ -15,11 +17,13 @@ class MainViewModel: ViewModel() {
         get() = _isUserCourier
 
     init {
-        _isUserCourier.value = runBlocking { authRepository.isUserCourier() }
+        viewModelScope.launch {
+            _isUserCourier.value = authRepository.isUserCourier()
+        }
     }
 
     fun setIsUserCourier(isCourier: Boolean) {
-        runBlocking {
+        viewModelScope.launch {
             if (authRepository.setUserCourier(isCourier)) {
                 _isUserCourier.value = isCourier
             }
