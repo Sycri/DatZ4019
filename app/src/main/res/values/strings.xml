@@ -22,6 +22,7 @@
     <string name="action_register">Create an account</string>
     <string name="action_signup">Create account</string>
     <string name="action_login">Login</string>
+    <string name="action_logout">Logout</string>
 
     <string name="welcome">"Welcome %1$s!"</string>
     <string name="invalid_account">Invalid e-mail/password</string>

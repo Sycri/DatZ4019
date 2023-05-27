@@ -14,7 +14,10 @@ class AuthRepository {
 
     suspend fun loginWithEmail(email: String, password: String): UserResult {
         return try {
-            val data = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val data = firebaseAuth
+                .signInWithEmailAndPassword(email, password)
+                .await()
+
             UserResult(success = data)
         } catch (e: Exception) {
             UserResult(error = e)
@@ -23,13 +26,29 @@ class AuthRepository {
 
     suspend fun registerWithEmail(email: String, password: String, username: String): UserResult {
         return try {
-            val data = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            val data = firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .await()
 
-            val profileUpdates = UserProfileChangeRequest.Builder()
-                .setDisplayName(username)
-                .build()
+            data
+                .user!!
+                .updateProfile(
+                    UserProfileChangeRequest
+                        .Builder()
+                        .setDisplayName(username)
+                        .build()
+                )
+                .await()
 
-            data.user?.updateProfile(profileUpdates)?.await()
+            userDocs
+                .document(data.user!!.uid)
+                .set(
+                    hashMapOf(
+                        "isCourier" to false
+                    ),
+                    SetOptions.mergeFields("isCourier")
+                )
+                .await()
 
             UserResult(success = data)
         } catch (e: Exception) {
@@ -53,7 +72,6 @@ class AuthRepository {
             if (firebaseAuth.currentUser == null) {
                 false
             } else {
-                println("isUserCourier: ${firebaseAuth.currentUser!!.uid}")
                 userDocs
                     .document(firebaseAuth.currentUser!!.uid)
                     .get()

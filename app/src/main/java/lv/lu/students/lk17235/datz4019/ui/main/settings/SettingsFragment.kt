@@ -35,5 +35,9 @@ class SettingsFragment : Fragment() {
         binding.switchIsCourier.setOnCheckedChangeListener { _, isChecked ->
             sharedViewModel.setIsUserCourier(isChecked)
         }
+
+        binding.buttonLogout.setOnClickListener {
+            sharedViewModel.onLogoutClick()
+        }
     }
 }

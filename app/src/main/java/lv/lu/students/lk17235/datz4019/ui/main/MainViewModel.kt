@@ -25,4 +25,8 @@ class MainViewModel: ViewModel() {
             }
         }
     }
+
+    fun onLogoutClick() {
+        authRepository.logout()
+    }
 }
