@@ -20,6 +20,6 @@ class OrderPagingSource(private val repository: OrderRepository) : PagingSource<
     }
 
     override fun getRefreshKey(state: PagingState<String, OrderModel>): String? {
-        return state.lastItemOrNull()?.id;
+        return null
     }
 }
