@@ -4,24 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import lv.lu.students.lk17235.datz4019.databinding.FragmentOrdersBinding
 import lv.lu.students.lk17235.datz4019.ui.main.OrderAdapter
-import lv.lu.students.lk17235.datz4019.ui.main.OrderPagingSource
 
 class OrdersFragment : Fragment() {
     private lateinit var binding: FragmentOrdersBinding
@@ -34,7 +27,6 @@ class OrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentOrdersBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -49,24 +41,19 @@ class OrdersFragment : Fragment() {
             adapter.refresh()
         }
 
-        val pagingConfig = PagingConfig(10, 10, false)
-        val pager = Pager(pagingConfig) {
-            OrderPagingSource(viewModel.orderRepository)
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    pager.flow.collect {
+                    viewModel.flow.collectLatest {
                         adapter.submitData(it)
                     }
                 }
 
-                adapter.loadStateFlow
-                    .distinctUntilChangedBy { it.refresh }
-                    .collect { loadState ->
-                        binding.swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+                launch {
+                    adapter.loadStateFlow.collectLatest {
+                        binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
                     }
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 package lv.lu.students.lk17235.datz4019.data.model
 
-data class OrderModel(
+data class Order(
     val id: String,
     val userId: String,
     val name: String,

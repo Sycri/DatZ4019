@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
-import lv.lu.students.lk17235.datz4019.data.model.OrderModel
+import lv.lu.students.lk17235.datz4019.data.model.Order
 
 private data class OrderFirebaseData(
     val userId: String,
@@ -18,7 +18,7 @@ class OrderRepository {
     private val orderDocs = Firebase.firestore.collection("orders")
     private val orderStorage = Firebase.storage.reference.child("orders")
 
-    suspend fun addOrder(order: OrderModel, photoUri: Uri?): Boolean {
+    suspend fun addOrder(order: Order, photoUri: Uri?): Boolean {
         return try {
             if (order.photoFileName != null && photoUri != null) {
                 orderStorage
@@ -59,7 +59,7 @@ class OrderRepository {
         }
     }
 
-    suspend fun updateOrder(order: OrderModel, photoUri: Uri?): Boolean {
+    suspend fun updateOrder(order: Order, photoUri: Uri?): Boolean {
         return try {
             if (order.photoFileName != null && photoUri != null && order.photoFileName != photoUri.lastPathSegment) {
                 orderStorage
@@ -87,13 +87,13 @@ class OrderRepository {
         }
     }
 
-    suspend fun getOrder(documentId: String): OrderModel? {
+    suspend fun getOrder(documentId: String): Order? {
         return try {
             orderDocs
                 .document(documentId)
                 .get()
                 .await()
-                .toObject(OrderModel::class.java)
+                .toObject(Order::class.java)
                 ?.copy(id = documentId)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -101,20 +101,38 @@ class OrderRepository {
         }
     }
 
-    suspend fun getOrders(userId: String?, pageSize: Int, lastVisibleOrderId: String?): List<OrderModel> {
+    suspend fun getOrders(userId: String?, pageSize: Int, lastVisibleOrder: Order?): List<Order> {
         return try {
             val querySnapshot = if (userId != null) {
                 orderDocs
                     .whereEqualTo("userId", userId)
                     .orderBy("name")
-                    .startAfter(lastVisibleOrderId)
+                    .startAfter(
+                        lastVisibleOrder?.let {
+                            OrderFirebaseData(
+                                userId = it.userId,
+                                name = it.name,
+                                description = it.description,
+                                photoFileName = it.photoFileName
+                            )
+                        }
+                    )
                     .limit(pageSize.toLong())
                     .get()
                     .await()
             } else {
                 orderDocs
                     .orderBy("name")
-                    .startAfter(lastVisibleOrderId)
+                    .startAfter(
+                        lastVisibleOrder?.let {
+                            OrderFirebaseData(
+                                userId = it.userId,
+                                name = it.name,
+                                description = it.description,
+                                photoFileName = it.photoFileName
+                            )
+                        }
+                    )
                     .limit(pageSize.toLong())
                     .get()
                     .await()
@@ -128,7 +146,7 @@ class OrderRepository {
                 val description = doc.getString("description") ?: ""
                 val photoFileName = doc.getString("photoFileName")
 
-                OrderModel(id, userId, name, description, photoFileName)
+                Order(id, userId, name, description, photoFileName)
             }
         } catch (e: Exception) {
             e.printStackTrace()

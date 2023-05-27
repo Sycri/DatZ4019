@@ -9,13 +9,13 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import lv.lu.students.lk17235.datz4019.data.OrderRepository
-import lv.lu.students.lk17235.datz4019.data.model.OrderModel
+import lv.lu.students.lk17235.datz4019.data.model.Order
 import lv.lu.students.lk17235.datz4019.databinding.ListItemOrderBinding
 
 class OrderAdapter(
     private val viewModelScope: CoroutineScope,
     private val repository: OrderRepository
-) : PagingDataAdapter<OrderModel, OrderViewHolder>(OrderModelComparator) {
+) : PagingDataAdapter<Order, OrderAdapter.OrderViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemOrderBinding.inflate(inflater, parent, false)
@@ -26,45 +26,43 @@ class OrderAdapter(
         val order = getItem(position)
         holder.bind(order)
     }
-}
 
-class OrderViewHolder(
-    private val binding: ListItemOrderBinding,
-    private val viewModelScope: CoroutineScope,
-    private val repository: OrderRepository
-) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(order: OrderModel?) {
-        if (order != null) {
-            binding.textViewOrderName.text = order.name
+    companion object : DiffUtil.ItemCallback<Order>() {
+        override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-            // Call getOrderPhotoUri to get the photo URI for the order
-            order.photoFileName?.let { photoFileName ->
-                viewModelScope.launch {
-                    repository.getOrderPhotoUri(photoFileName)?.let { photoUri ->
-                        // Load and display the order photo using the provided URI
-                        Glide.with(binding.root)
-                            .load(photoUri)
-                            .centerCrop()
-                            .into(binding.imageViewOrderLogo)
-                    }
-                }
-            }
-        } else {
-            // Order is null, show placeholder or clear views
-            binding.textViewOrderName.text = ""
-            binding.imageViewOrderLogo.setImageDrawable(null)
+        override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem == newItem
         }
     }
-}
 
-object OrderModelComparator : DiffUtil.ItemCallback<OrderModel>() {
-    override fun areItemsTheSame(oldItem: OrderModel, newItem: OrderModel): Boolean {
-        return oldItem.id == newItem.id
-    }
+    inner class OrderViewHolder(
+        private val binding: ListItemOrderBinding,
+        private val viewModelScope: CoroutineScope,
+        private val repository: OrderRepository
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(order: Order?) {
+            if (order != null) {
+                binding.textViewOrderName.text = order.name
 
-    override fun areContentsTheSame(oldItem: OrderModel, newItem: OrderModel): Boolean {
-        return oldItem.name == newItem.name
-            && oldItem.description == newItem.description
-            && oldItem.photoFileName == newItem.photoFileName
+                // Call getOrderPhotoUri to get the photo URI for the order
+                order.photoFileName?.let { photoFileName ->
+                    viewModelScope.launch {
+                        repository.getOrderPhotoUri(photoFileName)?.let { photoUri ->
+                            // Load and display the order photo using the provided URI
+                            Glide.with(binding.root)
+                                .load(photoUri)
+                                .centerCrop()
+                                .into(binding.imageViewOrderLogo)
+                        }
+                    }
+                }
+            } else {
+                // Order is null, show placeholder or clear views
+                binding.textViewOrderName.text = ""
+                binding.imageViewOrderLogo.setImageDrawable(null)
+            }
+        }
     }
 }
