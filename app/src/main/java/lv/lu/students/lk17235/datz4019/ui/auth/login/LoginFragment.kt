@@ -44,18 +44,18 @@ class LoginFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     when (actionId) {
-                        EditorInfo.IME_ACTION_DONE -> viewModel.login()
+                        EditorInfo.IME_ACTION_DONE -> viewModel.onLoginClick()
                     }
                     false
                 }
             }
 
             buttonLogin.setOnClickListener {
-                viewModel.login()
+                viewModel.onLoginClick()
             }
 
             buttonSignup.setOnClickListener {
-                viewModel.onRegisterClick()
+                viewModel.onNavigateToRegisterClick()
             }
         }
 
@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
                 if (it) {
                     val action = LoginFragmentDirections.actionLoginFragmentToSignupFragment()
                     navController.navigate(action)
-                    afterNavigatingToRegister()
+                    afterNavigateToRegister()
                 }
             }
 

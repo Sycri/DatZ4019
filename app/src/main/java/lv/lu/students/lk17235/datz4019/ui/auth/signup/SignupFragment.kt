@@ -51,14 +51,14 @@ class SignupFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     when (actionId) {
-                        EditorInfo.IME_ACTION_DONE -> viewModel.register()
+                        EditorInfo.IME_ACTION_DONE -> viewModel.onRegisterClick()
                     }
                     false
                 }
             }
 
             buttonRegister.setOnClickListener {
-                viewModel.register()
+                viewModel.onRegisterClick()
             }
         }
 

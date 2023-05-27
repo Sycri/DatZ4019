@@ -46,7 +46,7 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun login() {
+    fun onLoginClick() {
         if (!checkDataValidity) {
             return
         }
@@ -58,17 +58,16 @@ class LoginViewModel : ViewModel() {
                 editTextEmail.value.orEmpty(),
                 editTextPassword.value.orEmpty()
             )
-            _userResult.value = null
 
             _loadingBarVisibility.value = View.GONE
         }
     }
 
-    fun onRegisterClick() {
+    fun onNavigateToRegisterClick() {
         _navigateToRegister.value = true
     }
 
-    fun afterNavigatingToRegister() {
+    fun afterNavigateToRegister() {
         _navigateToRegister.value = false
     }
 }

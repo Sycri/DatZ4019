@@ -57,7 +57,7 @@ class SignupViewModel : ViewModel() {
         }
     }
 
-    fun register() {
+    fun onRegisterClick() {
         if (!checkDataValidity) {
             return
         }
