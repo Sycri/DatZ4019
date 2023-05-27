@@ -109,12 +109,7 @@ class OrderRepository {
                     .orderBy("name")
                     .startAfter(
                         lastVisibleOrder?.let {
-                            OrderFirebaseData(
-                                userId = it.userId,
-                                name = it.name,
-                                description = it.description,
-                                photoFileName = it.photoFileName
-                            )
+                            it.name
                         }
                     )
                     .limit(pageSize.toLong())
@@ -125,12 +120,7 @@ class OrderRepository {
                     .orderBy("name")
                     .startAfter(
                         lastVisibleOrder?.let {
-                            OrderFirebaseData(
-                                userId = it.userId,
-                                name = it.name,
-                                description = it.description,
-                                photoFileName = it.photoFileName
-                            )
+                            it.name
                         }
                     )
                     .limit(pageSize.toLong())

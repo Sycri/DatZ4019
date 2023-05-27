@@ -10,13 +10,17 @@ class OrderPagingSource(
 ) : PagingSource<List<Order>, Order>() {
     override suspend fun load(params: LoadParams<List<Order>>): LoadResult<List<Order>, Order> {
         return try {
-            val currentPage = params.key ?: emptyList()
-            val nextPage = repository.getOrders(userId, params.loadSize, currentPage.lastOrNull())
+            val currentPage = params.key ?: repository.getOrders(userId, params.loadSize, null)
+            val nextPage = if (currentPage.size < params.loadSize) {
+                null // Last page reached, set nextPage to null
+            } else {
+                repository.getOrders(userId, params.loadSize, currentPage.lastOrNull())
+            }
 
             LoadResult.Page(
-                data = nextPage,
+                data = currentPage,
                 prevKey = null,
-                nextKey = nextPage.takeIf { it.isNotEmpty() }
+                nextKey = nextPage
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
