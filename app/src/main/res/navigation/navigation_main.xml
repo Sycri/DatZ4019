@@ -6,16 +6,16 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
+        android:id="@+id/navigation_settings"
+        android:name="lv.lu.students.lk17235.datz4019.ui.main.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
         android:id="@+id/navigation_home"
         android:name="lv.lu.students.lk17235.datz4019.ui.main.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="lv.lu.students.lk17235.datz4019.ui.main.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_orders"

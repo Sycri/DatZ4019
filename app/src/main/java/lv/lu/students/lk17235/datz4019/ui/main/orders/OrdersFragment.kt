@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,12 +16,11 @@ import androidx.paging.LoadState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import lv.lu.students.lk17235.datz4019.databinding.FragmentOrdersBinding
+import lv.lu.students.lk17235.datz4019.ui.main.MainViewModel
 import lv.lu.students.lk17235.datz4019.ui.main.OrderAdapter
 
 class OrdersFragment : Fragment() {
     private lateinit var binding: FragmentOrdersBinding
-    private lateinit var viewModel: OrdersViewModel
-    private lateinit var adapter: OrderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +34,23 @@ class OrdersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[OrdersViewModel::class.java]
+        val sharedViewModel: MainViewModel by activityViewModels()
+        val viewModel: OrdersViewModel by viewModels()
 
-        adapter = OrderAdapter(viewModel.viewModelScope, viewModel.orderRepository)
+        val adapter = OrderAdapter(viewModel.viewModelScope, viewModel.orderRepository)
         binding.recyclerViewOrders.adapter = adapter
         binding.swipeRefreshLayout.setOnRefreshListener {
             adapter.refresh()
+        }
+
+        sharedViewModel.isUserCourier.observe(viewLifecycleOwner) {
+            val prevIsUserCourier = viewModel.isUserCourier.value
+
+            viewModel.isUserCourier.value = it
+
+            if (prevIsUserCourier != it) {
+                adapter.refresh()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

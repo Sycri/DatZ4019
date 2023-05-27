@@ -11,7 +11,8 @@ import lv.lu.students.lk17235.datz4019.data.AuthRepository
 import lv.lu.students.lk17235.datz4019.ui.auth.UserResult
 
 class LoginViewModel : ViewModel() {
-    private val authRepository = AuthRepository()
+    private val authRepository
+        get() = AuthRepository()
 
     val editTextEmail = MutableLiveData<String>()
     val editTextPassword = MutableLiveData<String>()

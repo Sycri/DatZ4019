@@ -30,8 +30,8 @@ class LoginFragment : Fragment() {
 
         val navController = view.findNavController()
 
-        val viewModel: LoginViewModel by viewModels()
         val sharedViewModel: AuthViewModel by activityViewModels()
+        val viewModel: LoginViewModel by viewModels()
 
         with(binding) {
             editTextEmail.addTextChangedListener {

@@ -29,8 +29,8 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel: SignupViewModel by viewModels()
         val sharedViewModel: AuthViewModel by activityViewModels()
+        val viewModel: SignupViewModel by viewModels()
 
         with(binding) {
             editTextEmail.addTextChangedListener {

@@ -51,8 +51,8 @@ class AuthActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.currentUser?.let { user ->
-            showLoginSuccess(user.displayName ?: user.email!!)
+        viewModel.userDisplayName?.let {
+            showLoginSuccess(it)
         }
     }
 

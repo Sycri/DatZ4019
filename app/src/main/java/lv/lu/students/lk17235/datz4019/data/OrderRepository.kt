@@ -70,13 +70,13 @@ class OrderRepository {
 
             orderDocs
                 .document(order.id)
-                .set(
-                    OrderFirebaseData(
-                        userId = order.userId,
-                        name = order.name,
-                        description = order.description,
-                        photoFileName = order.photoFileName
-                    )
+                .update(
+                    hashMapOf<String, Any?>(
+                        "userId" to order.userId,
+                        "name" to order.name,
+                        "description" to order.description,
+                        "photoFileName" to order.photoFileName
+                    ),
                 )
                 .await()
 
@@ -108,9 +108,7 @@ class OrderRepository {
                     .whereEqualTo("userId", userId)
                     .orderBy("name")
                     .startAfter(
-                        lastVisibleOrder?.let {
-                            it.name
-                        }
+                        lastVisibleOrder?.name
                     )
                     .limit(pageSize.toLong())
                     .get()
@@ -119,9 +117,7 @@ class OrderRepository {
                 orderDocs
                     .orderBy("name")
                     .startAfter(
-                        lastVisibleOrder?.let {
-                            it.name
-                        }
+                        lastVisibleOrder?.name
                     )
                     .limit(pageSize.toLong())
                     .get()
