@@ -17,7 +17,6 @@ import lv.lu.students.lk17235.datz4019.databinding.ActivityAuthBinding
 import lv.lu.students.lk17235.datz4019.ui.main.MainActivity
 
 class AuthActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAuthBinding
     private lateinit var viewModel: AuthViewModel
 
@@ -77,5 +76,4 @@ class AuthActivity : AppCompatActivity() {
 
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
     }
-
 }

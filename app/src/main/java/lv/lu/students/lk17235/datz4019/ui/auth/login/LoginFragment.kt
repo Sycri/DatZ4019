@@ -14,7 +14,6 @@ import lv.lu.students.lk17235.datz4019.databinding.FragmentLoginBinding
 import lv.lu.students.lk17235.datz4019.ui.auth.AuthViewModel
 
 class LoginFragment : Fragment() {
-
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
@@ -84,5 +83,4 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
 }

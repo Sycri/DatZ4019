@@ -5,5 +5,5 @@ data class OrderModel(
     val userId: String,
     val name: String,
     val description: String,
-    val photoName: String
+    val photoFileName: String?,
 )

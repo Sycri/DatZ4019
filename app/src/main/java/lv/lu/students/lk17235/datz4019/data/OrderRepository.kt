@@ -11,19 +11,18 @@ private data class OrderFirebaseData(
     val userId: String,
     val name: String,
     val description: String,
-    val photoName: String
+    val photoFileName: String?
 )
 
 class OrderRepository {
-
     private val orderDocs = Firebase.firestore.collection("orders")
     private val orderStorage = Firebase.storage.reference.child("orders")
 
     suspend fun addOrder(order: OrderModel, photoUri: Uri?): Boolean {
         return try {
-            if (photoUri != null) {
+            if (order.photoFileName != null && photoUri != null) {
                 orderStorage
-                    .child(order.photoName)
+                    .child(order.photoFileName)
                     .putFile(photoUri)
                     .await()
             }
@@ -34,7 +33,7 @@ class OrderRepository {
                         userId = order.userId,
                         name = order.name,
                         description = order.description,
-                        photoName = order.photoName
+                        photoFileName = order.photoFileName
                     )
                 )
                 .await()
@@ -62,9 +61,9 @@ class OrderRepository {
 
     suspend fun updateOrder(order: OrderModel, photoUri: Uri?): Boolean {
         return try {
-            if (photoUri != null && order.photoName != photoUri.lastPathSegment) {
+            if (order.photoFileName != null && photoUri != null && order.photoFileName != photoUri.lastPathSegment) {
                 orderStorage
-                    .child(order.photoName)
+                    .child(order.photoFileName)
                     .putFile(photoUri)
                     .await()
             }
@@ -76,7 +75,7 @@ class OrderRepository {
                         userId = order.userId,
                         name = order.name,
                         description = order.description,
-                        photoName = order.photoName
+                        photoFileName = order.photoFileName
                     )
                 )
                 .await()
@@ -123,7 +122,13 @@ class OrderRepository {
             }
 
             querySnapshot.documents.mapNotNull { doc ->
-                doc.toObject(OrderModel::class.java)?.copy(id = doc.id)
+                val id = doc.id
+                val userId = doc.getString("userId") ?: ""
+                val name = doc.getString("name") ?: ""
+                val description = doc.getString("description") ?: ""
+                val photoFileName = doc.getString("photoFileName")
+
+                OrderModel(id, userId, name, description, photoFileName)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -131,10 +136,10 @@ class OrderRepository {
         }
     }
 
-    suspend fun getOrderPhotoUri(photoName: String): Uri? {
+    suspend fun getOrderPhotoUri(photoFileName: String): Uri? {
         return try {
             orderStorage
-                .child(photoName)
+                .child(photoFileName)
                 .downloadUrl
                 .await()
         } catch (e: Exception) {
@@ -142,5 +147,4 @@ class OrderRepository {
             null
         }
     }
-
 }

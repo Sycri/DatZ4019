@@ -15,7 +15,6 @@ import lv.lu.students.lk17235.datz4019.databinding.FragmentSignupBinding
 import lv.lu.students.lk17235.datz4019.ui.auth.AuthViewModel
 
 class SignupFragment : Fragment() {
-
     private lateinit var binding: FragmentSignupBinding
 
     override fun onCreateView(
@@ -122,5 +121,4 @@ class SignupFragment : Fragment() {
             }
         }
     }
-
 }

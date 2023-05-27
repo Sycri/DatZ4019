@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import lv.lu.students.lk17235.datz4019.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -29,5 +28,4 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
-
 }

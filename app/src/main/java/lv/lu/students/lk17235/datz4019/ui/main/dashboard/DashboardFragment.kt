@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import lv.lu.students.lk17235.datz4019.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
-
     private lateinit var binding: FragmentDashboardBinding
 
     override fun onCreateView(
@@ -28,5 +27,4 @@ class DashboardFragment : Fragment() {
         }
         return binding.root
     }
-
 }

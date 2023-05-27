@@ -11,7 +11,6 @@ import lv.lu.students.lk17235.datz4019.R
 import lv.lu.students.lk17235.datz4019.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
