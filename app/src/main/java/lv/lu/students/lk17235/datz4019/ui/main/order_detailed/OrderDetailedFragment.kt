@@ -63,7 +63,7 @@ class OrderDetailedFragment : Fragment() {
 
                 val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
 
-                TimePickerDialog(requireContext(), { _, hour, minute ->
+                TimePickerDialog(requireContext(), R.style.AppTheme_TimePicker, { _, hour, minute ->
                     viewModel.setOrderPickupTime(hour, minute)
                 }, currentHour, 0, true).show()
             }
