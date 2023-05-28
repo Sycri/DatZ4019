@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import lv.lu.students.lk17235.datz4019.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -17,15 +17,18 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val viewModel: HomeViewModel by viewModels()
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        val textView: TextView = binding.textHome
-        viewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.buttonAddOrder.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToOrderDetailedFragment(null)
+            findNavController().navigate(action)
         }
-
-        return binding.root
     }
 }

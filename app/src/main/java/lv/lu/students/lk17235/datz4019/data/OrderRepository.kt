@@ -1,6 +1,9 @@
 package lv.lu.students.lk17235.datz4019.data
 
 import android.net.Uri
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -9,9 +12,13 @@ import lv.lu.students.lk17235.datz4019.data.model.Order
 
 private data class OrderFirebaseData(
     val userId: String = "",
-    val name: String = "",
-    val description: String = "",
-    val photoFileName: String? = null
+    val address: String = "",
+    val comment: String = "",
+    val pickupTime: Timestamp? = null,
+    val photoFileName: String? = null,
+    @ServerTimestamp
+    val createdAt: Timestamp? = null,
+    val updatedAt: Timestamp? = null
 )
 
 class OrderRepository {
@@ -31,9 +38,12 @@ class OrderRepository {
                 .add(
                     OrderFirebaseData(
                         userId = order.userId,
-                        name = order.name,
-                        description = order.description,
-                        photoFileName = order.photoFileName
+                        address = order.address,
+                        comment = order.comment,
+                        pickupTime = order.pickupTime,
+                        photoFileName = order.photoFileName,
+                        createdAt = null,
+                        updatedAt = null
                     )
                 )
                 .await()
@@ -61,22 +71,35 @@ class OrderRepository {
 
     suspend fun updateOrder(order: Order, photoUri: Uri?): Boolean {
         return try {
-            if (order.photoFileName != null && photoUri != null && order.photoFileName != photoUri.lastPathSegment) {
-                orderStorage
-                    .child(order.photoFileName)
-                    .putFile(photoUri)
-                    .await()
+            val prevData = getOrder(order.id!!)!!
+
+            if (prevData.photoFileName != order.photoFileName) {
+                if (prevData.photoFileName != null) {
+                    orderStorage
+                        .child(prevData.photoFileName)
+                        .delete()
+                        .await()
+                }
+
+                if (order.photoFileName != null && photoUri != null) {
+                    orderStorage
+                        .child(order.photoFileName)
+                        .putFile(photoUri)
+                        .await()
+                }
             }
 
             orderDocs
                 .document(order.id)
                 .update(
-                    hashMapOf<String, Any?>(
+                    mapOf(
                         "userId" to order.userId,
-                        "name" to order.name,
-                        "description" to order.description,
-                        "photoFileName" to order.photoFileName
-                    ),
+                        "address" to order.address,
+                        "comment" to order.comment,
+                        "pickupTime" to order.pickupTime,
+                        "photoFileName" to order.photoFileName,
+                        "updatedAt" to FieldValue.serverTimestamp()
+                    )
                 )
                 .await()
 
@@ -98,9 +121,12 @@ class OrderRepository {
                     Order(
                         id = documentId,
                         userId = it.userId,
-                        name = it.name,
-                        description = it.description,
-                        photoFileName = it?.photoFileName
+                        address = it.address,
+                        comment = it.comment,
+                        pickupTime = it.pickupTime,
+                        photoFileName = it.photoFileName,
+                        createdAt = it.createdAt,
+                        updatedAt = it.updatedAt
                     )
                 }
         } catch (e: Exception) {
@@ -114,18 +140,18 @@ class OrderRepository {
             val querySnapshot = if (userId != null) {
                 orderDocs
                     .whereEqualTo("userId", userId)
-                    .orderBy("name")
+                    .orderBy("createdAt")
                     .startAfter(
-                        lastVisibleOrder?.name
+                        lastVisibleOrder?.createdAt
                     )
                     .limit(pageSize.toLong())
                     .get()
                     .await()
             } else {
                 orderDocs
-                    .orderBy("name")
+                    .orderBy("createdAt")
                     .startAfter(
-                        lastVisibleOrder?.name
+                        lastVisibleOrder?.createdAt
                     )
                     .limit(pageSize.toLong())
                     .get()
@@ -136,11 +162,14 @@ class OrderRepository {
             querySnapshot.documents.mapNotNull {
                 val id = it.id
                 val userId = it.getString("userId") ?: ""
-                val name = it.getString("name") ?: ""
-                val description = it.getString("description") ?: ""
+                val address = it.getString("address") ?: ""
+                val comment = it.getString("comment") ?: ""
+                val pickupTime = it.getTimestamp("pickupTime")
                 val photoFileName = it.getString("photoFileName")
+                val createdAt = it.getTimestamp("createdAt")
+                val updatedAt = it.getTimestamp("updatedAt")
 
-                Order(id, userId, name, description, photoFileName)
+                Order(id, userId, address, comment, pickupTime, photoFileName, createdAt, updatedAt)
             }
         } catch (e: Exception) {
             e.printStackTrace()

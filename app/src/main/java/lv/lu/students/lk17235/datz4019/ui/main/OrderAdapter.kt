@@ -45,7 +45,7 @@ class OrderAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(order: Order?) {
             if (order != null) {
-                binding.textViewOrderName.text = order.name
+                binding.textViewAddress.text = order.address
 
                 // Call getOrderPhotoUri to get the photo URI for the order
                 order.photoFileName?.let { photoFileName ->
@@ -55,18 +55,18 @@ class OrderAdapter(
                             Glide.with(binding.root)
                                 .load(photoUri)
                                 .centerCrop()
-                                .into(binding.imageViewOrderLogo)
+                                .into(binding.imageViewPhoto)
                         }
                     }
                 }
 
                 binding.constraintLayoutItemOrder.setOnClickListener {
-                    clickListener(order.id)
+                    clickListener(order.id!!)
                 }
             } else {
                 // Order is null, show placeholder or clear views
-                binding.textViewOrderName.text = ""
-                binding.imageViewOrderLogo.setImageDrawable(null)
+                binding.textViewAddress.text = ""
+                binding.imageViewPhoto.setImageDrawable(null)
             }
         }
     }

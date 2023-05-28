@@ -43,7 +43,7 @@ class AuthRepository {
             userDocs
                 .document(data.user!!.uid)
                 .set(
-                    hashMapOf(
+                    mapOf(
                         "isCourier" to false
                     ),
                     SetOptions.mergeFields("isCourier")
