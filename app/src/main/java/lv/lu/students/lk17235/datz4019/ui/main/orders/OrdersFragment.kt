@@ -41,18 +41,30 @@ class OrdersFragment : Fragment() {
             val action = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailedFragment(it)
             findNavController().navigate(action)
         }
-        binding.recyclerViewOrders.adapter = adapter
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            adapter.refresh()
+
+        with(binding) {
+            recyclerViewOrders.adapter = adapter
+            swipeRefreshLayout.setOnRefreshListener {
+                adapter.refresh()
+            }
         }
 
-        sharedViewModel.isUserCourier.observe(viewLifecycleOwner) {
-            val prevIsUserCourier = viewModel.isUserCourier.value
+        with(sharedViewModel) {
+            isUserCourier.observe(viewLifecycleOwner) {
+                val prevIsUserCourier = viewModel.isUserCourier.value
 
-            viewModel.isUserCourier.value = it
+                viewModel.isUserCourier.value = it
 
-            if (prevIsUserCourier != it) {
-                adapter.refresh()
+                if (prevIsUserCourier != it) {
+                    adapter.refresh()
+                }
+            }
+
+            refreshOrders.observe(viewLifecycleOwner) {
+                if (it) {
+                    adapter.refresh()
+                    sharedViewModel.afterRefreshOrders()
+                }
             }
         }
 

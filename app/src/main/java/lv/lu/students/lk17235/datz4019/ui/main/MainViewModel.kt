@@ -15,6 +15,10 @@ class MainViewModel: ViewModel() {
     val isUserCourier: LiveData<Boolean>
         get() = _isUserCourier
 
+    private val _refreshOrders = MutableLiveData<Boolean>()
+    val refreshOrders: LiveData<Boolean>
+        get() = _refreshOrders
+
     init {
         viewModelScope.launch {
             _isUserCourier.value = authRepository.isUserCourier()
@@ -27,6 +31,14 @@ class MainViewModel: ViewModel() {
                 _isUserCourier.value = isCourier
             }
         }
+    }
+
+    fun forceRefreshOrders() {
+        _refreshOrders.value = true
+    }
+
+    fun afterRefreshOrders() {
+        _refreshOrders.value = false
     }
 
     fun onLogoutClick() {

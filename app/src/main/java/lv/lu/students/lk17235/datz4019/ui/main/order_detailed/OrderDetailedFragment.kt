@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import lv.lu.students.lk17235.datz4019.R
 import lv.lu.students.lk17235.datz4019.databinding.FragmentOrderDetailedBinding
+import lv.lu.students.lk17235.datz4019.ui.main.MainViewModel
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -35,6 +37,7 @@ class OrderDetailedFragment : Fragment() {
 
         val args: OrderDetailedFragmentArgs by navArgs()
 
+        val sharedViewModel: MainViewModel by activityViewModels()
         val viewModel: OrderDetailedViewModel by viewModels() {
             OrderDetailedViewModelFactory(args.documentId)
         }
@@ -116,12 +119,14 @@ class OrderDetailedFragment : Fragment() {
             }
 
             orderUserCreated.observe(viewLifecycleOwner) {
-                binding.editTextAddress.isEnabled = it
-                binding.editTextComment.isEnabled = it
-                binding.buttonPickupTime.isEnabled = it
-                binding.imageButtonPhoto.isEnabled = it
-                binding.buttonDelete.visibility = if (it && orderId.value != null) View.VISIBLE else View.GONE
-                binding.buttonSave.visibility = if (it) View.VISIBLE else View.GONE
+                with(binding) {
+                    editTextAddress.isEnabled = it
+                    editTextComment.isEnabled = it
+                    buttonPickupTime.isEnabled = it
+                    imageButtonPhoto.isEnabled = it
+                    buttonDelete.visibility = if (it && orderId.value != null) View.VISIBLE else View.GONE
+                    buttonSave.visibility = if (it) View.VISIBLE else View.GONE
+                }
             }
 
             loadingBarVisibility.observe(viewLifecycleOwner) {
@@ -138,6 +143,7 @@ class OrderDetailedFragment : Fragment() {
 
             navigateBack.observe(viewLifecycleOwner) {
                 if (it) {
+                    sharedViewModel.forceRefreshOrders()
                     findNavController().navigateUp()
                     afterNavigateBack()
                 }
