@@ -122,6 +122,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageButtonFrame" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/AppTheme.AddLogo"
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
