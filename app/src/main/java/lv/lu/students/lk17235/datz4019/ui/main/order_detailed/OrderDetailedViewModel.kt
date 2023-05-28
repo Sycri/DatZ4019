@@ -7,10 +7,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import lv.lu.students.lk17235.datz4019.data.AuthRepository
 import lv.lu.students.lk17235.datz4019.data.OrderRepository
 import lv.lu.students.lk17235.datz4019.data.model.Order
+import java.util.Calendar
+import java.util.Date
 import java.util.UUID
 
 class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
@@ -32,6 +35,10 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
     val orderComment: LiveData<String>
         get() = _orderComment
 
+    private val _orderPickupTime = MutableLiveData<Date?>()
+    val orderPickupTime: LiveData<Date?>
+        get() = _orderPickupTime
+
     private val _orderPhotoFileName = MutableLiveData<String?>()
     val orderPhotoFileName: LiveData<String?>
         get() = _orderPhotoFileName
@@ -52,27 +59,28 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
     val isDataValid: LiveData<Boolean>
         get() = _isDataValid
 
-    private val _navigateBack = MutableLiveData<Boolean>()
-    val navigateBack: LiveData<Boolean>
-        get() = _navigateBack
-
     private val _choosingPhoto = MutableLiveData<Boolean>()
     val choosingPhoto: LiveData<Boolean>
         get() = _choosingPhoto
+
+    private val _navigateBack = MutableLiveData<Boolean>()
+    val navigateBack: LiveData<Boolean>
+        get() = _navigateBack
 
     val isAddressBlank: Boolean
         get() = orderAddress.value.isNullOrBlank()
 
     private val checkDataValidity: Boolean
-        get() = !isAddressBlank && (orderPhotoUri.value != null)
+        get() = !isAddressBlank && (orderPickupTime.value != null && orderPickupTime.value!! >= Calendar.getInstance().time) && (orderPhotoUri.value != null)
 
     init {
         _loadingBarVisibility.value = View.GONE
-        _navigateBack.value = false
         _choosingPhoto.value = false
+        _navigateBack.value = false
 
         with(_isDataValid) {
             addSource(orderAddress) { _isDataValid.value = checkDataValidity }
+            addSource(orderPickupTime) { _isDataValid.value = checkDataValidity }
             addSource(orderPhotoUri) { _isDataValid.value = checkDataValidity }
         }
 
@@ -86,6 +94,7 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
                     _orderId.value = it.id
                     _orderAddress.value = it.address
                     _orderComment.value = it.comment
+                    _orderPickupTime.value = it.pickupTime?.toDate()
                     _orderPhotoFileName.value = it.photoFileName
 
                     it.photoFileName?.let { photoFileName ->
@@ -99,15 +108,74 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
     }
 
     fun setOrderAddress(address: String) {
+        if (authRepository.getUserId == null || orderUserCreated.value != true) {
+            return
+        }
+
         _orderAddress.value = address
     }
 
     fun setOrderComment(comment: String) {
+        if (authRepository.getUserId == null || orderUserCreated.value != true) {
+            return
+        }
+
         _orderComment.value = comment
     }
 
+    fun setOrderPickupTime(hour: Int, minute: Int) {
+        if (authRepository.getUserId == null || orderUserCreated.value != true) {
+            return
+        }
+
+        val calendar = Calendar.getInstance()
+
+        // If the time is in the past, set it to tomorrow
+        if (calendar.get(Calendar.HOUR_OF_DAY) > hour || (calendar.get(Calendar.HOUR_OF_DAY) == hour && calendar.get(Calendar.MINUTE) > minute)) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+
+        _orderPickupTime.value = calendar.time
+    }
+
+    fun onPhotoClick() {
+        if (authRepository.getUserId == null || orderUserCreated.value != true) {
+            return
+        }
+
+        _choosingPhoto.value = true
+    }
+
+    fun afterPhotoClick(uri: Uri?) {
+        if (authRepository.getUserId != null && orderUserCreated.value == true && uri != null) {
+            _orderPhotoUri.value = uri
+            _orderPhotoFileName.value = UUID.randomUUID().toString().replace("-", "")
+        }
+
+        _choosingPhoto.value = false
+    }
+
+    fun onOrderDeleteClick() {
+        if (authRepository.getUserId == null || orderUserCreated.value != true || orderId.value == null) {
+            return
+        }
+
+        viewModelScope.launch {
+            _loadingBarVisibility.value = View.VISIBLE
+
+            orderRepository.deleteOrder(orderId.value!!)
+
+            _loadingBarVisibility.value = View.GONE
+            _navigateBack.value = true
+        }
+    }
+
     fun onOrderSaveClick() {
-        if (authRepository.getUserId == null) {
+        if (authRepository.getUserId == null || orderUserCreated.value != true) {
             return
         }
 
@@ -116,7 +184,7 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
             userId = authRepository.getUserId!!,
             address = orderAddress.value.orEmpty(),
             comment = orderComment.value.orEmpty(),
-            pickupTime = null,
+            pickupTime = orderPickupTime.value?.let { Timestamp(it) },
             photoFileName = orderPhotoFileName.value,
             createdAt = null,
             updatedAt = null
@@ -138,18 +206,5 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
 
     fun afterNavigateBack() {
         _navigateBack.value = false
-    }
-
-    fun onPhotoClick() {
-        _choosingPhoto.value = true
-    }
-
-    fun afterPhotoClick(uri: Uri?) {
-        if (uri != null) {
-            _orderPhotoUri.value = uri
-            _orderPhotoFileName.value = UUID.randomUUID().toString().replace("-", "")
-        }
-
-        _choosingPhoto.value = false
     }
 }

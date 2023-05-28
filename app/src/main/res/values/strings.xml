@@ -26,6 +26,8 @@
     <string name="action_logout">Logout</string>
     <string name="action_add_order">Add order</string>
     <string name="action_save">Save</string>
+    <string name="action_delete_order">Delete order</string>
+    <string name="action_select_pickup_time">Select</string>
 
     <string name="welcome">"Welcome %1$s!"</string>
     <string name="invalid_account">Invalid e-mail/password</string>
@@ -36,6 +38,7 @@
     <string name="prompt_logo">Logo</string>
     <string name="prompt_address">Address</string>
     <string name="prompt_comment">Comment</string>
+    <string name="prompt_pickup_time">Select pickup time</string>
 
     <string name="invalid_address">Must not be empty</string>
 

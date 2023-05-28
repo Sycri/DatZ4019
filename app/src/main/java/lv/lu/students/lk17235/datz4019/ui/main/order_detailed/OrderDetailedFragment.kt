@@ -1,6 +1,7 @@
 package lv.lu.students.lk17235.datz4019.ui.main.order_detailed
 
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import lv.lu.students.lk17235.datz4019.R
 import lv.lu.students.lk17235.datz4019.databinding.FragmentOrderDetailedBinding
+import java.text.DateFormat
+import java.util.Calendar
 
 class OrderDetailedFragment : Fragment() {
     private lateinit var binding: FragmentOrderDetailedBinding
@@ -49,8 +52,25 @@ class OrderDetailedFragment : Fragment() {
                 viewModel.setOrderComment(it.toString())
             }
 
+            buttonPickupTime.setOnClickListener {
+                val calendar = Calendar.getInstance()
+
+                // Set the initial time to the current time plus one hour
+                calendar.add(Calendar.HOUR_OF_DAY, 1)
+
+                val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+
+                TimePickerDialog(requireContext(), { _, hour, minute ->
+                    viewModel.setOrderPickupTime(hour, minute)
+                }, currentHour, 0, true).show()
+            }
+
             imageButtonPhoto.setOnClickListener {
                 viewModel.onPhotoClick()
+            }
+
+            buttonDelete.setOnClickListener {
+                viewModel.onOrderDeleteClick()
             }
 
             buttonSave.setOnClickListener {
@@ -76,6 +96,14 @@ class OrderDetailedFragment : Fragment() {
                 }
             }
 
+            orderPickupTime.observe(viewLifecycleOwner) {
+                if (it == null) {
+                    binding.textViewPickupTime.text = getString(R.string.prompt_pickup_time)
+                } else {
+                    binding.textViewPickupTime.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(it)
+                }
+            }
+
             orderPhotoUri.observe(viewLifecycleOwner) {
                 if (it == null) {
                     binding.imageButtonPhoto.setImageDrawable(null)
@@ -90,12 +118,18 @@ class OrderDetailedFragment : Fragment() {
             orderUserCreated.observe(viewLifecycleOwner) {
                 binding.editTextAddress.isEnabled = it
                 binding.editTextComment.isEnabled = it
+                binding.buttonPickupTime.isEnabled = it
                 binding.imageButtonPhoto.isEnabled = it
+                binding.buttonDelete.visibility = if (it && orderId.value != null) View.VISIBLE else View.GONE
                 binding.buttonSave.visibility = if (it) View.VISIBLE else View.GONE
             }
 
             loadingBarVisibility.observe(viewLifecycleOwner) {
                 binding.loadingBar.visibility = it
+            }
+
+            orderId.observe(viewLifecycleOwner) {
+                binding.buttonDelete.visibility = if (it == null || orderUserCreated.value != true) View.GONE else View.VISIBLE
             }
 
             isDataValid.observe(viewLifecycleOwner) {
