@@ -30,4 +30,8 @@
         <item name="trackTint">@color/switch_colors</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
+    <style name="AppTheme.Logo">
+        <item name="android:src">@drawable/main_logo</item>
+    </style>
 </resources>
