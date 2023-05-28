@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -19,13 +20,15 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthBinding
     private lateinit var viewModel: AuthViewModel
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_auth)
+        navController = findNavController(R.id.nav_host_fragment_activity_auth)
         setupActionBarWithNavController(navController)
 
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
@@ -67,5 +70,9 @@ class AuthActivity : AppCompatActivity() {
         )
 
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
     }
 }
