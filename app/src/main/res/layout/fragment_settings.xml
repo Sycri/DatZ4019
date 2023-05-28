@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.main.settings.SettingsFragment">
 
-    <com.google.android.material.materialswitch.MaterialSwitch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switchIsCourier"
         android:layout_width="0dp"
         android:layout_height="48dp"
@@ -20,8 +21,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/buttonLogout"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

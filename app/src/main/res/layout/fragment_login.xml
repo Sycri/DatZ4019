@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.login.LoginFragment"
-    android:background="@color/main_orange"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.auth.login.LoginFragment">
 
     <ImageView
         android:id="@+id/logo"
@@ -29,7 +28,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:layout_gravity="center"
-        android:background="@drawable/rounded_background"
         android:hint="@string/prompt_email"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/logo"
@@ -53,7 +51,6 @@
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         android:layout_gravity="center"
-        android:background="@drawable/rounded_background"
         android:hint="@string/prompt_password"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +71,7 @@
 
     <Button
         android:id="@+id/buttonLogin"
+        style="@style/AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -82,11 +80,9 @@
         android:layout_marginEnd="48dp"
         android:enabled="false"
         android:text="@string/action_login"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
-        style="@style/Theme.DatZ4019.Button" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
     <ProgressBar
         android:id="@+id/loadingBar"
@@ -112,12 +108,11 @@
 
     <Button
         android:id="@+id/buttonSignup"
+        style="@style/AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_signup"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/textViewNoAccount"
         app:layout_constraintStart_toStartOf="@+id/textViewNoAccount"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNoAccount"
-        style="@style/Theme.DatZ4019.Button" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNoAccount" />
 </androidx.constraintlayout.widget.ConstraintLayout>

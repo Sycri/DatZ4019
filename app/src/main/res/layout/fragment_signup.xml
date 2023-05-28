@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.auth.signup.SignupFragment">
 
     <ImageView
@@ -87,7 +88,7 @@
             android:autofillHints="password"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
-            android:background="@drawable/rounded_background"/>
+            android:background="@drawable/rounded_background" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -118,6 +119,7 @@
 
     <Button
         android:id="@+id/buttonRegister"
+        style="@style/AppTheme.Button"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginStart="48dp"
@@ -128,8 +130,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutConfirmPassword"
-        style="@style/Theme.DatZ4019.Button" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutConfirmPassword" />
 
     <ProgressBar
         android:id="@+id/loadingBar"

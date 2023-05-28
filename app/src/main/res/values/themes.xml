@@ -1,22 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.DatZ4019" parent="Theme.Material3.DayNight">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/main_orange</item>
-        <item name="colorSecondaryVariant">@color/main_orange</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/main_orange</item>
-        <item name="buttonStyle">@style/Theme.DatZ4019.Button</item>
+        <item name="android:windowBackground">@color/background_orange</item>
     </style>
 
-    <style name="Theme.DatZ4019.Button" parent="Widget.MaterialComponents.Button">
+    <style name="AppTheme.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/black</item> <!-- Text color of the button -->
-        <item name="backgroundTint">@color/white</item> <!-- Background color of the button -->
+        <item name="backgroundTint">@color/btn_color_selector</item> <!-- Background color of the button -->
     </style>
 </resources>
