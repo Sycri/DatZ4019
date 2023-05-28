@@ -57,10 +57,19 @@ class OrderRepository {
 
     suspend fun deleteOrder(id: String): Boolean {
         return try {
+            val prevData = getOrder(id)!!
+
             orderDocs
                 .document(id)
                 .delete()
                 .await()
+
+            if (prevData.photoFileName != null) {
+                orderStorage
+                    .child(prevData.photoFileName)
+                    .delete()
+                    .await()
+            }
 
             true
         } catch (e: Exception) {
