@@ -19,4 +19,15 @@
         <item name="android:textColor">@color/black</item> <!-- Text color of the button -->
         <item name="backgroundTint">@color/btn_color_selector</item> <!-- Background color of the button -->
     </style>
+
+    <style name="AppTheme.TextInput" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/black</item> <!-- Text color of the button -->
+        <item name="backgroundTint">@color/white</item> <!-- Background color of the button -->
+    </style>
+
+    <style name="AppTheme.Thumb" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="thumbTint">@color/background_orange</item>
+        <item name="trackTint">@color/switch_colors</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 </resources>

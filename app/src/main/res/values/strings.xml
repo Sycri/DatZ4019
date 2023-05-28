@@ -29,7 +29,7 @@
     <string name="invalid_account">Invalid e-mail/password</string>
     <string name="auth_failed">Login/Registration failed</string>
 
-    <string name="setting_is_courier">Is Courier</string>
+    <string name="setting_is_courier">Courier Mode</string>
 
     <string name="prompt_logo">Logo</string>
     <string name="prompt_title">Title</string>
