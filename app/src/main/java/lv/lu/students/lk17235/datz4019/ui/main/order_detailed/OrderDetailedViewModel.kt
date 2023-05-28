@@ -175,7 +175,7 @@ class OrderDetailedViewModel(private val documentId: String?) : ViewModel() {
     }
 
     fun onOrderSaveClick() {
-        if (authRepository.getUserId == null || orderUserCreated.value != true) {
+        if (isDataValid.value != true || authRepository.getUserId == null || orderUserCreated.value != true) {
             return
         }
 
