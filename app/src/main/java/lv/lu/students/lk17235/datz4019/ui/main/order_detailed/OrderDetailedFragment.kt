@@ -1,8 +1,6 @@
 package lv.lu.students.lk17235.datz4019.ui.main.order_detailed
 
-import android.app.Activity
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -141,17 +139,17 @@ class OrderDetailedFragment : Fragment() {
                 binding.buttonSave.isEnabled = it
             }
 
+            choosingPhoto.observe(viewLifecycleOwner) {
+                if (it) {
+                    photoPickerLauncher.launch("image/*")
+                }
+            }
+
             navigateBack.observe(viewLifecycleOwner) {
                 if (it) {
                     sharedViewModel.forceRefreshOrders()
                     findNavController().navigateUp()
                     afterNavigateBack()
-                }
-            }
-
-            choosingPhoto.observe(viewLifecycleOwner) {
-                if (it) {
-                    photoPickerLauncher.launch("image/*")
                 }
             }
         }
