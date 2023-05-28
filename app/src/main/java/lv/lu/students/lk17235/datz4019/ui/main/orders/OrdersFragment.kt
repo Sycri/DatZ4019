@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,7 +37,10 @@ class OrdersFragment : Fragment() {
         val sharedViewModel: MainViewModel by activityViewModels()
         val viewModel: OrdersViewModel by viewModels()
 
-        val adapter = OrderAdapter(viewModel.viewModelScope, viewModel.orderRepository)
+        val adapter = OrderAdapter(viewModel.viewModelScope, viewModel.orderRepository) {
+            val action = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailedFragment(it)
+            findNavController().navigate(action)
+        }
         binding.recyclerViewOrders.adapter = adapter
         binding.swipeRefreshLayout.setOnRefreshListener {
             adapter.refresh()

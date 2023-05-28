@@ -8,10 +8,10 @@ import kotlinx.coroutines.tasks.await
 import lv.lu.students.lk17235.datz4019.data.model.Order
 
 private data class OrderFirebaseData(
-    val userId: String,
-    val name: String,
-    val description: String,
-    val photoFileName: String?
+    val userId: String = "",
+    val name: String = "",
+    val description: String = "",
+    val photoFileName: String? = null
 )
 
 class OrderRepository {
@@ -93,8 +93,16 @@ class OrderRepository {
                 .document(documentId)
                 .get()
                 .await()
-                .toObject(Order::class.java)
-                ?.copy(id = documentId)
+                .toObject(OrderFirebaseData::class.java)
+                ?.let {
+                    Order(
+                        id = documentId,
+                        userId = it.userId,
+                        name = it.name,
+                        description = it.description,
+                        photoFileName = it?.photoFileName
+                    )
+                }
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -125,12 +133,12 @@ class OrderRepository {
 
             }
 
-            querySnapshot.documents.mapNotNull { doc ->
-                val id = doc.id
-                val userId = doc.getString("userId") ?: ""
-                val name = doc.getString("name") ?: ""
-                val description = doc.getString("description") ?: ""
-                val photoFileName = doc.getString("photoFileName")
+            querySnapshot.documents.mapNotNull {
+                val id = it.id
+                val userId = it.getString("userId") ?: ""
+                val name = it.getString("name") ?: ""
+                val description = it.getString("description") ?: ""
+                val photoFileName = it.getString("photoFileName")
 
                 Order(id, userId, name, description, photoFileName)
             }

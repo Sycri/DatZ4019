@@ -21,5 +21,23 @@
         android:id="@+id/navigation_orders"
         android:name="lv.lu.students.lk17235.datz4019.ui.main.orders.OrdersFragment"
         android:label="@string/title_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders">
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailedFragment"
+            app:destination="@id/navigation_order_detailed"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_order_detailed"
+        android:name="lv.lu.students.lk17235.datz4019.ui.main.order_detailed.OrderDetailedFragment"
+        android:label="@string/title_order_detailed"
+        tools:layout="@layout/fragment_order_detailed">
+        <argument
+            android:name="documentId"
+            app:argType="string" />
+    </fragment>
 </navigation>

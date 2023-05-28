@@ -14,7 +14,8 @@ import lv.lu.students.lk17235.datz4019.databinding.ListItemOrderBinding
 
 class OrderAdapter(
     private val viewModelScope: CoroutineScope,
-    private val repository: OrderRepository
+    private val repository: OrderRepository,
+    private val clickListener: (String) -> Unit
 ) : PagingDataAdapter<Order, OrderAdapter.OrderViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -57,6 +58,10 @@ class OrderAdapter(
                                 .into(binding.imageViewOrderLogo)
                         }
                     }
+                }
+
+                binding.constraintLayoutItemOrder.setOnClickListener {
+                    clickListener(order.id)
                 }
             } else {
                 // Order is null, show placeholder or clear views

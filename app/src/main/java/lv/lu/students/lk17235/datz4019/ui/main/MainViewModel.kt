@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import lv.lu.students.lk17235.datz4019.data.AuthRepository
 
 class MainViewModel: ViewModel() {
