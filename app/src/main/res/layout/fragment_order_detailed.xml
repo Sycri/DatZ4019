@@ -6,38 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.main.order_detailed.OrderDetailedFragment">
-
-    <ImageButton
-        android:id="@+id/imageButtonPhoto"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_background"
-        android:contentDescription="@string/prompt_logo"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutAddress"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:hint="@string/prompt_address"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButtonPhoto"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonPhoto"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:boxStrokeWidth="0dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/AppTheme.TextInput"
+            android:layout_marginTop="16dp"
             android:id="@+id/editTextAddress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,21 +31,21 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutComment"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="start|top"
         android:hint="@string/prompt_comment"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonPhoto"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:boxStrokeWidth="0dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/AppTheme.TextInput"
             android:id="@+id/editTextComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,6 +56,27 @@
             android:scrollbars="vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <FrameLayout
+        android:id="@+id/imageButtonFrame"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_background"
+        style="@style/AppTheme.Frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutComment">
+
+        <ImageView
+            android:id="@+id/imageButtonPhoto"
+            android:layout_width="224dp"
+            android:layout_height="224dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/prompt_logo"
+            android:scaleType="centerCrop" />
+
+    </FrameLayout>
+
     <ProgressBar
         android:id="@+id/loadingBar"
         android:layout_width="wrap_content"
@@ -81,7 +85,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonFrame" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonSave"
